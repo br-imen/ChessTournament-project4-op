@@ -12,11 +12,21 @@ class Round:
         self.tournament_id = tournament_id
         self.start_datetime = datetime.now().isoformat(timespec='minutes') 
         self.end_datetime = end_datetime
+        self.matchs = []
 
 
     def __str__(self) -> str:
         return f"name : {self.name}"
     
+    def serialize(self) -> dict:
+        return {
+            "id" : self.id,
+            "name" : self.name,
+            "tounament_id" : self.tournament_id,
+            "start_datetime" : self.start_datetime,
+            "end_datetime" : self.end_datetime,
+            "matchs": [(["player1", 1], ["player2", 0]), (["player3", 0.5], ["player4", 0.5])]
+        }
 
     def save(self):
 

@@ -31,3 +31,7 @@ class Player:
         list_players.append(player_dict)
         with open(f"{ABSOLUTE_PATH}/data/players/players.json", "w") as player_file:
             json.dump(list_players, player_file)
+
+
+        # verify id does not exist !
+        # tinydb 

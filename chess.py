@@ -30,13 +30,16 @@ def create_data_folder():
 
 
 def main():
+    MainController().start()
     create_data_folder()
     while True:
         # View : Options to choose 
         option = Options.choose()
+
+        # To register player
         if option == "1":
 
-            # Model : Get list of attributes of class Player
+            # Model : Get list of attributes from class Player
             list_inputs = Player.get_attributes()
 
             # View: print out for player inputs
@@ -44,14 +47,22 @@ def main():
 
             # Controller: create player and save in json file
             PlayerController.create_player(player_dict)
+
             print("Player successfully registred !")
             pass
 
-        # View : menu to create tournament
+        # To create tournament
         if option == "2":
+
+            # Get inputs of trounament
             tournament_dict = TournamentView.get_inputs()
+
+            # instantiate a tournament 
             tournament = Tournament(**tournament_dict)
+
+            # save it in json file
             tournament.save()
+
             print("Tournament successfully created !")
              
             
