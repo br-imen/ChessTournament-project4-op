@@ -30,6 +30,14 @@ class Player:
         player = cls(**dict_player)
         return player
 
+    @classmethod
+    def deserialize_all_players(cls,dict_all_players):
+        dict_all_players_object = {}
+        for key, value in dict_all_players.items():
+            player = cls.deserialize(value)
+            dict_all_players_object[key] = player
+        return dict_all_players_object
+        
 
     def save(self):
         try:

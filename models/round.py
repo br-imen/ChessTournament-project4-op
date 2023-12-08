@@ -23,6 +23,7 @@ class Round:
         return f"{self.serialize()}"
 
     def serialize(self) -> dict:
+        import pdb; pdb.set_trace()
         return {
             "name": self.name,
             "start_datetime": self.start_datetime,
@@ -42,8 +43,8 @@ class Round:
                                         score_player2=tuple_match[1][1]))
             i+=1
         round = cls(name=dict_round['name'],
-                    start_datetime=dict_round['start_datetime'],
-                    end_datetime=dict_round['end_datetime'],
+                    start_datetime=datetime.fromisoformat(dict_round['start_datetime']),
+                    end_datetime=datetime.fromisoformat(dict_round['end_datetime']) if dict_round['end_datetime'] else dict_round['end_datetime'] ,
                     list_matchs=list_matchs)
         return round
 
@@ -55,6 +56,7 @@ class Round:
         self.list_matchs.append(match)
 
     def end_round(self):
+        import pdb; pdb.set_trace()
         self.end_datetime = datetime.now()
 
 

@@ -13,6 +13,6 @@ class Menu:
 
     def menu_another_round(self):
         option_another_round = input(
-            "\nType (2) to start another round \nYour response: "
+            "\nChoose an option to do : \nType (0) -----> to quit \nType (2) -----> to start another round \nYour response: "
         )
         return option_another_round

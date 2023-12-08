@@ -62,6 +62,7 @@ class Tournament:
         return dict_total_score
 
     def serialize(self):
+        
         return {
             "id": self.id,
             "name": self.name,

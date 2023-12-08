@@ -64,26 +64,24 @@ class MainController:
         id = PlayerView.get_id()
 
         # search id player:
-        dict_player = self.search_player(id)
+        player_object= self.search_player(id)
 
-        if not dict_player:
+        if not player_object:
             return "\nERROR: Player's id not found \n"
 
         # Get list of ids already registred in tournament.list_players
         list_ids = []
-        for player in self.tournament.list_players:
-            list_ids.append(player.id_player)
+        for element in self.tournament.list_players:
+            list_ids.append(element.id_player)
 
         # If there is, He cannot be added
         if id in list_ids:
             return "\nError:Player already registred in tournament \n"
 
-        player = Player(**dict_player)
-
         # Add player to player_list in Tournament object "tournament":
-        self.tournament.add_player(player=player)
+        self.tournament.add_player(player=player_object)
         self.save()
-        return f"\n **** Player added : {player} \n "
+        return f"\n **** Player added : {player_object.id_player} \n "
 
     # Start round
     def start_round(self):
@@ -188,7 +186,7 @@ class MainController:
         for player in self.tournament.list_players:
             list_players.append(player)
         sorted_list_players: list[dict] = sorted(
-            list_players, key=lambda x: x["first_name"]
+            list_players, key=lambda x: x.first_name
         )
         for player in sorted_list_players:
             print(player)
@@ -201,21 +199,22 @@ class MainController:
         dict_players = {}
         try:
             with open(f"{self.player_path}/players.json", "r") as players_file:
-                dict_players = json.load(players_file)
+                dict_players = json.load(players_file)           
         except FileNotFoundError:
             print("\n Error: No players \n")
-        return dict_players
+        dict_all_players_objects = Player.deserialize_all_players(dict_players)
+        return dict_all_players_objects
 
     # Show all list players
     def show_all_players(self):
         print(
             "\n----------------------- List all players -----------------------\n"
         )
-        dict_players = self.get_all_players_data()
-        if dict_players:
-            for id in dict_players:
+        dict_players_objects = self.get_all_players_data()
+        if dict_players_objects:
+            for id,value in dict_players_objects.items():
                 print(
-                    f"{id} \n   First name: {dict_players[id]['first_name']} | Last name: {dict_players[id]['last_name']} | Date of birth: {dict_players[id]['date_birth']}\n\n"
+                    f"{id} \n   First name: {value.first_name} | Last name: {value.last_name} | Date of birth: {value.date_birth}\n\n"
                 )
         else:
             print("\nError : No players found\n")
@@ -229,17 +228,16 @@ class MainController:
         list_rounds = self.tournament.list_rounds
         for round in list_rounds:
             print(
-                f"\n\n*************{round['name']}*************\n"
-                f"start date : {round['start_datetime']}\n"
-                f"End date : {round['end_datetime']}\n"
+                f"\n\n*************{round.name}*************\n"
+                f"start date : {round.start_datetime}\n"
+                f"End date : {round.end_datetime}\n"
             )
-            list_matchs = round["matchs"]
             i = 1
-            for match in list_matchs:
+            for match in round.list_matchs:
                 print(
                     f"---- match{i} ----\n"
-                    f"Player {match[0][0]} scores: {match[0][1]}\n"
-                    f"Player {match[1][0]} scores: {match[1][1]}\n"
+                    f"Player {match.player1_id} scores: {match.score_player1}\n"
+                    f"Player {match.player2_id} scores: {match.score_player2}\n"
                 )
                 i += 1
         print(
@@ -255,7 +253,6 @@ class MainController:
                 dict_tournaments = json.load(tournament_file)
         except FileNotFoundError:
             dict_tournaments = {}
-        print(self.tournament)
         dict_tournaments[self.tournament.id] = self.tournament.serialize()
         with open(f"{self.tournament_path}/tournaments.json", "w") as file:
             json.dump(dict_tournaments, file)
@@ -293,9 +290,9 @@ class MainController:
 
     # search for id player:
     def search_player(self, id):
-        dict_players = self.get_all_players_data()
-        if id in dict_players:
-            return dict_players[id]
+        dict_players_object = self.get_all_players_data()
+        if id in dict_players_object:
+            return dict_players_object[id]
 
     # Get the last tournament
     def get_last_tournament(self):
@@ -319,7 +316,7 @@ class MainController:
             round = self.start_round()
             for match in round.list_matchs:
                 print(
-                    f"\n*******-- {match.name} --*******\n"
+                    f"\n\n*******-- {match.name} --*******\n"
                     f"Player 1: [{match.player1_id}] ==> {match.score_player1} \n"
                     f"Player 2: [{match.player2_id}] ==> {match.score_player2} \n"
                 )
@@ -391,6 +388,11 @@ class MainController:
                     if choice == "2":
                         self.run_round()
 
+                    if choice == "0":
+                        self.save()
+                        break
+
+
             # To show reports
             if choice == "3":
                 # Show all tournaments
@@ -401,10 +403,9 @@ class MainController:
                     # See reports of a tournament
                     if report_choice == "2":
                         id_tournament = ReportsView.report_tournament()
-                        tournament_dict = self.search_tournament(id_tournament)
-                        if tournament_dict:
-                            tournament = Tournament(**tournament_dict)
-                            self.tournament = tournament
+                        tournament_object = self.search_tournament(id_tournament)
+                        if tournament_object:
+                            self.tournament = tournament_object
                             while True:
                                 choice_report = ReportsView.get_reports()
 
@@ -465,6 +466,11 @@ class MainController:
                     # To start a round:
                     if choice == "2":
                         self.run_round()
+
+                    if choice == "0":
+                        self.save()
+                        break
+                        
                         
 
             else:
