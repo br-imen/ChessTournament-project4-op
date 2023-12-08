@@ -60,28 +60,43 @@ class MainController:
 
     # Add player to tournament
     def add_player_tournament(self):
-        # Get id player
-        id = PlayerView.get_id()
+        len_list_players = 1
+        while len_list_players % 2 != 0:
+            # Get id player
+            id = PlayerView.get_id()
 
-        # search id player:
-        player_object= self.search_player(id)
+            # search id player:
+            player_object= self.search_player(id)
 
-        if not player_object:
-            return "\nERROR: Player's id not found \n"
+            if not player_object:
+                print("\nERROR: Player's id not found \n")
+                continue
 
-        # Get list of ids already registred in tournament.list_players
-        list_ids = []
-        for element in self.tournament.list_players:
-            list_ids.append(element.id_player)
+            # Get list of ids already registred in tournament.list_players
+            list_ids = []
+            for element in self.tournament.list_players:
+                list_ids.append(element.id_player)
 
-        # If there is, He cannot be added
-        if id in list_ids:
-            return "\nError:Player already registred in tournament \n"
-
-        # Add player to player_list in Tournament object "tournament":
-        self.tournament.add_player(player=player_object)
-        self.save()
-        return f"\n **** Player added : {player_object.id_player} \n "
+            # If there is, He cannot be added
+            if id in list_ids:
+                print("\nError:Player already registred in tournament \n")
+                continue
+            # Add player to player_list in Tournament object "tournament":
+            self.tournament.add_player(player=player_object)
+            self.save()
+            print(
+                "\n--------------- Names of players registred in this tournament --------------\n"
+            )
+            for player in self.tournament.list_players:
+                print(
+                    f"Player {player.first_name} {player.id_player}\n"
+                )
+            print(
+                f"\n--------------- Total players in tournament : {len(self.tournament.list_players)} ---------------- \n"
+            )
+            len_list_players = len(self.tournament.list_players)
+            if len_list_players % 2 != 0:
+                print("\nYou must add another player\n")
 
     # Start round
     def start_round(self):
@@ -122,13 +137,11 @@ class MainController:
         # r : len(tournament.list_round), There is previous rounds
         if r >= 1:
             # Create a list player filtered by score:
-            print(f"\ndict: {self.tournament.total_score}")
             sorted_list_total_scores: list[tuple()] = sorted(
                 self.tournament.total_score.items(),
                 key=lambda x: x[1],
                 reverse=True,
             )
-            print(f"\nlist : {sorted_list_total_scores}")
 
             # Create a list of Matchs
             for i in range(0, len(sorted_list_total_scores), 2):
@@ -167,6 +180,7 @@ class MainController:
             round.end_round()
             self.tournament.end_tournament()
             self.save()
+            # DISPLAY score
             print("\n************* End of tournament ***************** \n")
             print(f"\nResults : {self.tournament.total_score} \n")
             return
@@ -179,14 +193,15 @@ class MainController:
 
     # Show list_players of tournament
     def show_list_players_tournament(self):
+        # display list players with argument sorted in tournament view
         list_players = []
-        print(
-            "\n--------------- Names of players registred in this tournament --------------\n"
-        )
         for player in self.tournament.list_players:
             list_players.append(player)
         sorted_list_players: list[dict] = sorted(
             list_players, key=lambda x: x.first_name
+        )
+        print(
+            "\n--------------- Names of players registred in this tournament --------------\n"
         )
         for player in sorted_list_players:
             print(player)
@@ -221,6 +236,7 @@ class MainController:
         print("-------------------------------------------------------\n")
 
     # Show match and rounds
+    # round view dispay round
     def show_rounds_matchs(self):
         print(
             f"\n--------------- Rounds and its matchs of '''{self.tournament.name}''' tournament --------------\n"
@@ -246,17 +262,21 @@ class MainController:
 
     # Save tournament:
     def save(self):
+        dict_tournaments = {}
         try:
             with open(
                 f"{self.tournament_path}/tournaments.json", "r"
             ) as tournament_file:
                 dict_tournaments = json.load(tournament_file)
         except FileNotFoundError:
-            dict_tournaments = {}
+            pass
+        except json.decoder.JSONDecodeError as e:
+            raise e
         dict_tournaments[self.tournament.id] = self.tournament.serialize()
         with open(f"{self.tournament_path}/tournaments.json", "w") as file:
             json.dump(dict_tournaments, file)
 
+    # display tournament  intournament view for one trourmanent
     # Show all tournaments:
     def show_all_tournaments(self):
         print(
@@ -279,7 +299,8 @@ class MainController:
                 dict_tournaments = json.load(tournament_file)
                 dict_tournaments_objects = Tournament.deserialize_all_tournaments(dict_tournaments)
         except FileNotFoundError:
-            print("\nError: No tournaments\n")
+            # tournaments view no ournament fouind error
+            print("\nError: no tournament found\n")
         return dict_tournaments_objects
 
     # search for id tournament:
@@ -306,15 +327,18 @@ class MainController:
     # Start and end a round
     def run_round(self):
         if not self.tournament.list_players:
+            # Round view error missing players error
             print(
                 "\nYou can't start round there is no players registred in the tournament \n"
             )
             pass
         elif len(self.tournament.list_players) % 2 != 0:
+            # roundview info
             print("\nAdd another player. \n")
         else:
             round = self.start_round()
             for match in round.list_matchs:
+                # match view diplay match
                 print(
                     f"\n\n*******-- {match.name} --*******\n"
                     f"Player 1: [{match.player1_id}] ==> {match.score_player1} \n"
@@ -327,6 +351,7 @@ class MainController:
                 # update the score in match:
                 match.score_player1 = points_players[0]
                 match.score_player2 = points_players[1]
+                # match view diplay match
                 print(
                     f"\n\n******* Results ******* \n"
                     f"Player 1: [{match.player1_id}] ==> {match.score_player1} \n"
@@ -353,6 +378,7 @@ class MainController:
             # To register player
             if choice == "1":
                 player = self.register_player()
+                #display player in Player view
                 print("\nplayer registred\n")
 
             # To create tournament
@@ -371,18 +397,7 @@ class MainController:
 
                     # To add player
                     if choice == "1":
-                        response = self.add_player_tournament()
-                        print(response)
-                        print(
-                            "\n--------------- Names of players registred in this tournament --------------\n"
-                        )
-                        for player in self.tournament.list_players:
-                            print(
-                                f"Player {player.first_name} {player.id_player}\n"
-                            )
-                        print(
-                            f"\n--------------- Total players in tournament : {len(self.tournament.list_players)} ---------------- \n"
-                        )
+                        self.add_player_tournament()
 
                     # To start a round:
                     if choice == "2":
@@ -405,6 +420,9 @@ class MainController:
                         id_tournament = ReportsView.report_tournament()
                         tournament_object = self.search_tournament(id_tournament)
                         if tournament_object:
+                            # tournament view display 
+                            print(f"\n\n ********* Tournament {tournament_object.id}*********\n")
+                            print(f"\n\n {tournament_object.name}  from {tournament_object.start_datetime} to {tournament_object.end_datetime}\n\n")
                             self.tournament = tournament_object
                             while True:
                                 choice_report = ReportsView.get_reports()
@@ -420,7 +438,7 @@ class MainController:
                                 if choice_report == "3":
                                     break
                         else:
-                            print("\nError: The tournament not found \n")
+                            print("\nError: no tournament found\n")
                             pass
 
                     # Show all players
@@ -435,6 +453,7 @@ class MainController:
             if choice == "4":
                 last_tournament = self.get_last_tournament()
                 if last_tournament == None:
+                    # tournament view no tournament to resume
                     print("There is no Tournament to resume")
                     continue
                 self.tournament = last_tournament
@@ -450,18 +469,7 @@ class MainController:
 
                     # To add player
                     if choice == "1":
-                        response = self.add_player_tournament()
-                        print(response)
-                        print(
-                            "\n--------------- Names of players registred in this tournament --------------\n"
-                        )
-                        for player in self.tournament.list_players:
-                            print(
-                                f"Player {player.first_name} {player.id_player}\n"
-                            )
-                        print(
-                            f"\n--------------- Total players in tournament : {len(self.tournament.list_players)} ---------------- \n"
-                        )
+                        self.add_player_tournament()
 
                     # To start a round:
                     if choice == "2":

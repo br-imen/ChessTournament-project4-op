@@ -15,7 +15,7 @@ class Round:
         # self.id = str(uuid.uuid4())
         self.name: str = name
         # self.tournament_id = tournament_id
-        self.start_datetime = datetime.now().isoformat(timespec="minutes") if start_datetime is None else start_datetime
+        self.start_datetime = datetime.now()if start_datetime is None else start_datetime
         self.end_datetime = end_datetime
         self.list_matchs: list[Match] = list_matchs
 
@@ -23,10 +23,9 @@ class Round:
         return f"{self.serialize()}"
 
     def serialize(self) -> dict:
-        import pdb; pdb.set_trace()
         return {
             "name": self.name,
-            "start_datetime": self.start_datetime,
+            "start_datetime": self.start_datetime.isoformat(timespec="minutes") ,
             "end_datetime": self.end_datetime.isoformat(timespec="minutes"),
             "matchs": [m.serialize() for m in self.list_matchs],
         }
@@ -56,7 +55,6 @@ class Round:
         self.list_matchs.append(match)
 
     def end_round(self):
-        import pdb; pdb.set_trace()
         self.end_datetime = datetime.now()
 
 

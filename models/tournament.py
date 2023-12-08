@@ -28,7 +28,7 @@ class Tournament:
         self.id = str(uuid.uuid4()) if id is None else id
         self.name: str = name
         self.place: str = place
-        self.start_datetime = datetime.now().isoformat(timespec="minutes") if start_datetime is None else start_datetime
+        self.start_datetime = datetime.now() if start_datetime is None else start_datetime
         self.end_datetime = end_datetime
         self.number_rounds: int = number_rounds
         self.list_rounds: list[Round] = list_rounds
@@ -67,7 +67,7 @@ class Tournament:
             "id": self.id,
             "name": self.name,
             "place": self.place,
-            "start_datetime": self.start_datetime,
+            "start_datetime": self.start_datetime.isoformat(timespec="minutes"),
             "end_datetime": self.end_datetime.isoformat(timespec="minutes")
             if self.end_datetime
             else "",
@@ -89,8 +89,8 @@ class Tournament:
         tournament = Tournament(id=dict_tournament['id'],
                                 name=dict_tournament['name'],
                                 place=dict_tournament['place'],
-                                start_datetime=dict_tournament['start_datetime'],
-                                end_datetime=dict_tournament['end_datetime'],
+                                start_datetime=datetime.fromisoformat(dict_tournament['start_datetime']),
+                                end_datetime=datetime.fromisoformat(dict_tournament['end_datetime']) if dict_tournament['end_datetime'] else dict_tournament['end_datetime'],
                                 number_rounds=dict_tournament['number_rounds'],
                                 list_rounds=list_rounds,
                                 list_players=list_players,

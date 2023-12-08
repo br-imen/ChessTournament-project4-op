@@ -1,4 +1,5 @@
 class TournamentView:
+    
     @classmethod
     def get_inputs(cls):
         dict_inputs = {}
