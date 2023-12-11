@@ -28,7 +28,9 @@ class Tournament:
         self.id = str(uuid.uuid4()) if id is None else id
         self.name: str = name
         self.place: str = place
-        self.start_datetime = datetime.now() if start_datetime is None else start_datetime
+        self.start_datetime = (
+            datetime.now() if start_datetime is None else start_datetime
+        )
         self.end_datetime = end_datetime
         self.number_rounds: int = number_rounds
         self.list_rounds: list[Round] = list_rounds
@@ -62,7 +64,6 @@ class Tournament:
         return dict_total_score
 
     def serialize(self):
-        
         return {
             "id": self.id,
             "name": self.name,
@@ -76,35 +77,38 @@ class Tournament:
             "list_players": [p.serialize() for p in self.list_players],
             "description": self.description,
         }
-    
+
     @classmethod
     def deserialize(cls, dict_tournament):
         list_players = []
-        for dict_player in dict_tournament['list_players']:
+        for dict_player in dict_tournament["list_players"]:
             list_players.append(Player.deserialize(dict_player))
-        
+
         list_rounds = []
-        for dict_round in dict_tournament['list_rounds']:
-            list_rounds.append(Round.deserialize(dict_round))    
-        tournament = Tournament(id=dict_tournament['id'],
-                                name=dict_tournament['name'],
-                                place=dict_tournament['place'],
-                                start_datetime=datetime.fromisoformat(dict_tournament['start_datetime']),
-                                end_datetime=datetime.fromisoformat(dict_tournament['end_datetime']) if dict_tournament['end_datetime'] else dict_tournament['end_datetime'],
-                                number_rounds=dict_tournament['number_rounds'],
-                                list_rounds=list_rounds,
-                                list_players=list_players,
-                                description=dict_tournament['description'],)
+        for dict_round in dict_tournament["list_rounds"]:
+            list_rounds.append(Round.deserialize(dict_round))
+        tournament = Tournament(
+            id=dict_tournament["id"],
+            name=dict_tournament["name"],
+            place=dict_tournament["place"],
+            start_datetime=datetime.fromisoformat(dict_tournament["start_datetime"]),
+            end_datetime=datetime.fromisoformat(dict_tournament["end_datetime"])
+            if dict_tournament["end_datetime"]
+            else None,
+            number_rounds=dict_tournament["number_rounds"],
+            list_rounds=list_rounds,
+            list_players=list_players,
+            description=dict_tournament["description"],
+        )
         return tournament
-    
+
     @classmethod
-    def deserialize_all_tournaments(cls,dict_all_tournaments):
+    def deserialize_all_tournaments(cls, dict_all_tournaments):
         dict_all_tournaments_objects = {}
         for key, value in dict_all_tournaments.items():
             tournament_object = cls.deserialize(value)
             dict_all_tournaments_objects[key] = tournament_object
         return dict_all_tournaments_objects
-        
 
     def end_tournament(self):
         self.end_datetime = datetime.now()

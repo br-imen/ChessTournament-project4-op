@@ -5,9 +5,14 @@ class MatchView:
         return match
 
     @classmethod
-    def get_score_player(cls):
+    def get_score_player(cls, match):
+        print(f"\n\n**** Update {match.name} scores ****\n")
+
+        # match view diplay match
+        MatchView.display_match(match=match)
+
         response = input(
-            "\n-------- Update the score of ** Player 1 ** ---------\n\n     Type (1) if won  \n     Type (2) if lost \n     Type (3) if a tie \nYour response: "
+            f"\n\n-------- To update score for player ** {match.player1_id} ** ---------\n\n   Type (1) if won  \n   Type (2) if lost \n   Type (3) if a tie \n\n   Your response: "
         )
         if response == "1":
             point_player1 = 1
@@ -19,3 +24,19 @@ class MatchView:
             point_player1 = 0.5
             point_player2 = 0.5
         return point_player1, point_player2
+
+    @classmethod
+    def display_match(cls, match=None, total_score=None, updated=False):
+        if match:
+            if updated:
+                print(f"\n  ---- {match.name} scores updated ----\n")
+            else:
+                print(f"\n  ---- {match.name} ----\n")
+            print(
+                f"  Player {match.player1_id} scores: {match.score_player1}\n"
+                f"  Player {match.player2_id} scores: {match.score_player2}\n"
+            )
+        if total_score:
+            print("\n************* End of tournament ***************** \n")
+            for id, value in total_score.items():
+                print(f"Player {id} scores: {value}\n")
