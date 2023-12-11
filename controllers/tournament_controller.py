@@ -1,36 +1,18 @@
-from controllers.player_contoller import PlayerController
-from controllers.round_controller import RoundController
-from models.player import Player
+
+import json
 from models.tournament import Tournament
-from models.round import Round
-from models.match import Match
 from views.player_view import PlayerView
-from views.menu import Menu
+from views.reports_view import ReportsView
 from views.round_view import RoundView
 from views.tournament_view import TournamentView
-from views.match_view import MatchView
-from views.reports_view import ReportsView
-import os
-from settings import DATA_PATH
-import json
 
-class MainController:
-    def __init__(self):
-        self.tournament = None
-        self.tournament_path = f"{DATA_PATH}/tournaments"
-        self.player_controller = PlayerController()
-        self.round_controller = RoundController()
 
-    # To create a data folder
-    def create_data_folder(self):
-        if not os.path.exists(DATA_PATH):
-            os.makedirs(DATA_PATH)
-        if not os.path.exists(self.player_controller.player_path):
-            os.makedirs(self.player_controller.player_path)
-        if not os.path.exists(self.tournament_path):
-            os.makedirs(self.tournament_path)
+class TournamentController():
 
-    # To create tournament
+    def __init__(self, tournament=None) -> None:
+        self.tournament = tournament
+        
+        # To create tournament
     def create_tournament(self):
         list_tournaments_not_completed = self.filter_tournaments(end_datetime=None)
         if list_tournaments_not_completed == []:
@@ -39,11 +21,11 @@ class MainController:
             self.tournament = tournament
             self.save()
             TournamentView.display_tournament_data(tournament=tournament)
-            return "sucess"
+            return tournament
         else:
             TournamentView.error("There still a tournament not completed, you can't create a new one.")
-            return "failed"
-
+            return
+    
     # Add player to tournament
     def add_player_tournament(self):
         len_list_players = 1
@@ -93,7 +75,7 @@ class MainController:
         dict_tournaments[self.tournament.id] = self.tournament.serialize()
         with open(f"{self.tournament_path}/tournaments.json", "w") as file:
             json.dump(dict_tournaments, file)
-
+        
     # Get dict_tournaments:
     def get_all_tournaments_data(self):
         dict_tournaments_objects = {}
@@ -130,54 +112,6 @@ class MainController:
             if not tournament_object.end_datetime:
                 last_tournament_object = tournament_object
                 return last_tournament_object
-
-
-    # Start program
-    def start(self):
-        self.create_data_folder()
-
-        while True:
-            # Menu to choose
-            menu = Menu()
-            choice = menu.menu_principal()
-
-            # To register player
-            if choice == "1":
-                self.player_controller.register_player()
-
-            # To create tournament
-            if choice == "2":
-                result = self.create_tournament()
-                if result == "sucess":
-                    self.control_tournament()
-
-            # To show reports
-            if choice == "3":
-                # Show all tournaments
-                dict_tournaments_objects = self.get_all_tournaments_data()
-                TournamentView.display_tournament_data(all_tournaments=dict_tournaments_objects)
-                while True:
-                    report_choice = ReportsView.report_menu()
-
-                    # See reports of a tournament
-                    if report_choice == "2":
-                        self.tournament_report()
-
-                    # Show all players
-                    elif report_choice == "1":
-                        dict_all_players_objects = self.player_controller.get_all_players_data()
-                        PlayerView.display_player_list(all_players=dict_all_players_objects)
-
-                    # Go back
-                    elif report_choice == "0":
-                        break
-
-            # To continue a tournament:
-            if choice == "4":
-                self.resume_last_tournament()
-                self.control_tournament()
-            else:
-                continue
     
     def resume_last_tournament(self):
         last_tournament = self.get_last_tournament()
@@ -185,7 +119,6 @@ class MainController:
             TournamentView.error("No tournament to resume")
             return
         self.tournament = last_tournament
-
     
     def tournament_report(self):
         id_tournament = ReportsView.report_tournament_menu()
@@ -211,7 +144,7 @@ class MainController:
         else:
             TournamentView.error("No tournament found")
             pass
-    
+        
     def control_tournament(self):
         while not (
             len(self.tournament.list_rounds) == self.tournament.number_rounds

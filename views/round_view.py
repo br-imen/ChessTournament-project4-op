@@ -32,7 +32,7 @@ class RoundView:
 
     @classmethod
     def info(cls, message):
-        print(f"\Info: {message} \n")
+        print(f"\nInfo: {message} \n")
 
     @classmethod
     def display_all_rounds(cls, tournament=None):
