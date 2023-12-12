@@ -1,4 +1,5 @@
 from models.tournament import Tournament
+from views.helpers import title_2, title_3
 
 
 class TournamentView:
@@ -16,14 +17,18 @@ class TournamentView:
 
     # Print tournament that's created
     @classmethod
-    def display_tournament_data(cls, tournament: Tournament=None, all_tournaments:dict=None):
+    def display_tournament_data(
+        cls, tournament: Tournament = None, all_tournaments: dict = None
+    ):
         if tournament:
             print(
                 f"\n----------------------- The tournament id : {tournament.id} ----------------------- \n"
                 f"  Name = {tournament.name}"
             )
             if tournament.end_datetime:
-                print(f"  Date = {tournament.start_datetime} - {tournament.end_datetime}")
+                print(
+                    f"  Date = {tournament.start_datetime} - {tournament.end_datetime}"
+                )
             else:
                 print(f"  Date = {tournament.start_datetime}")
             print(
@@ -37,7 +42,10 @@ class TournamentView:
             )
             for id, tournament_object in all_tournaments.items():
                 print(
-                    f"{id} \n   Name: {tournament_object.name} | Place: {tournament_object.place} | Date: {tournament_object.start_datetime} - {tournament_object.end_datetime} \n\n"
+                    f"{id} \n   Name: {tournament_object.name} |"
+                    f" Place: {tournament_object.place} |"
+                    f" Date: {tournament_object.start_datetime} -"
+                    f" {tournament_object.end_datetime} \n\n"
                 )
             print("\n-------------------------------------------------------\n")
         else:
@@ -52,3 +60,11 @@ class TournamentView:
     @classmethod
     def info(cls, message):
         print(f"\nInfo: {message} \n")
+
+    @classmethod
+    def display_title_2(cls, message):
+        title_2(message=message)
+    
+    @classmethod
+    def display_title_3(cls, message):
+        title_3(message=message)

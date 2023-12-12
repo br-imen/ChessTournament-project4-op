@@ -1,5 +1,3 @@
-
-
 from models.match import Match
 from models.round import Round
 from models.tournament import Tournament
@@ -8,7 +6,6 @@ from views.round_view import RoundView
 
 
 class RoundController:
-
     def __init__(self) -> None:
         pass
 
@@ -27,7 +24,7 @@ class RoundController:
             tournament.add_round(round)
 
             RoundView.display_round(round)
-            return round  
+            return round
 
     # To create round
     def create_round(self, tournament):
@@ -71,27 +68,28 @@ class RoundController:
         round = Round(name=f"round{r+1}", list_matchs=list_matchs)
 
         return round
-    
+
     # To end round:
-    def end_round(self, round: Round, tournament:Tournament):
+    def end_round(self, round: Round, tournament: Tournament):
         # Get number of rounds have been done
         number_rounds = len(tournament.list_rounds)
 
-        # If number of rounds have been done is equal or exceed the number of total rounds in tournament object, we end the round and the tournamment.
+        # If number of rounds have been done is equal or exceed the number of total
+        # rounds in tournament object, we end the round and the tournamment.
         if number_rounds >= tournament.number_rounds:
-            round.end_round()
+            round.end()
             tournament.end_tournament()
-            self.save()
+            # self.save()
             MatchView.display_match(total_score=tournament.total_score)
             return
 
         # There is more rounds to finish, we end only the round
         else:
-            round.end_round()
-            self.save()
+            round.end()
+            # self.save()
             return
 
-    # From start a round to the end round  
+    # From start a round to the end round
     def run_round(self, tournament):
         if not tournament.list_players:
             # Round view error missing players error
@@ -104,8 +102,8 @@ class RoundController:
             RoundView.info("Add another player.")
         else:
             round = self.start_round(tournament=tournament)
+            RoundView.display_title_4("Update Match")
             for match in round.list_matchs:
-
                 # Get points of two players
                 points_players: tuple(str) = MatchView.get_score_player(match)
 
@@ -118,4 +116,3 @@ class RoundController:
 
             if len(tournament.list_rounds) == tournament.number_rounds:
                 return
-

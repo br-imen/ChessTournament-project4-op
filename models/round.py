@@ -62,7 +62,7 @@ class Round:
     def add_match(self, match: Match):
         self.list_matchs.append(match)
 
-    def end_round(self):
+    def end(self):
         self.end_datetime = datetime.now()
 
 

@@ -1,12 +1,10 @@
-
-
 import json
 from models.player import Player
 from views.player_view import PlayerView
 from settings import DATA_PATH
 
-class PlayerController():
 
+class PlayerController:
     def __init__(self) -> None:
         self.player_path = f"{DATA_PATH}/players"
 
@@ -14,13 +12,13 @@ class PlayerController():
         player_verif = True
         while player_verif:
             player_dict = PlayerView.get_inputs()
-            player_verif = self.search_player(id=player_dict['id_player'])
+            player_verif = self.search_player(id=player_dict["id_player"])
             if player_verif:
                 PlayerView.error("Player exist ! Please enter inputs again")
         player = Player(**player_dict)
         player.save()
         return player
-    
+
     def register_player(self):
         player = self.create_player()
         PlayerView.display_player(player=player)
@@ -36,7 +34,7 @@ class PlayerController():
             PlayerView.error("No players")
         dict_all_players_objects = Player.deserialize_all_players(dict_players)
         return dict_all_players_objects
-    
+
     # search for id player:
     def search_player(self, id):
         dict_players_object = self.get_all_players_data()
@@ -44,4 +42,3 @@ class PlayerController():
             return dict_players_object[id]
         else:
             return {}
-    

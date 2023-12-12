@@ -12,7 +12,11 @@ class MatchView:
         MatchView.display_match(match=match)
 
         response = input(
-            f"\n\n-------- To update score for player ** {match.player1_id} ** ---------\n\n   Type (1) if won  \n   Type (2) if lost \n   Type (3) if a tie \n\n   Your response: "
+            f"\n\n-------- Update score for player ** {match.player1_id} ** ---------\n\n"
+            f"   Type (1) if won  \n"
+            f"   Type (2) if lost \n"
+            f"   Type (3) if a tie \n\n"
+            f"   Your response: "
         )
         if response == "1":
             point_player1 = 1
@@ -29,7 +33,7 @@ class MatchView:
     def display_match(cls, match=None, total_score=None, updated=False):
         if match:
             if updated:
-                print(f"\n  ---- {match.name} scores updated ----\n")
+                print(f"\n  °°° scores updated °°° \n")
             else:
                 print(f"\n  ---- {match.name} ----\n")
             print(

@@ -1,4 +1,5 @@
 from models.round import Round
+from views.helpers import title_4
 from views.match_view import MatchView
 
 
@@ -7,11 +8,18 @@ class RoundView:
     def menu_start_round(self, list_rounds_length):
         if list_rounds_length == 0:
             option_start_round = input(
-                "\nChoose an option to do : \nType (1) -----> to add a player in tournament \nType (2) -----> to start a round\nType (0) -----> to quit \nYour response: "
+                "\nChoose an option to do : \n"
+                "Type (1) -----> Add a player in tournament \n"
+                "Type (2) -----> Start a round\n"
+                "Type (0) -----> Quit \n"
+                "Your response: "
             )
         else:
             option_start_round = input(
-            "\nChoose an option to do : \nType (2) -----> to start another round \nType (0) -----> to quit \nYour response: "
+                "\nChoose an option to do : \n"
+                "Type (2) -----> Start another round \n"
+                "Type (0) -----> Quit \n"
+                "Your response: "
             )
         return option_start_round
 
@@ -46,3 +54,7 @@ class RoundView:
             print(
                 "\n  -----------------------------------------------------------------------------\n"
             )
+    
+    @classmethod
+    def display_title_4(cls, message):
+        title_4(message=message)

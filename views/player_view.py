@@ -1,6 +1,7 @@
 import re
 
 from models.player import Player
+from views.helpers import print_table, title_2, title_3
 
 
 class PlayerView:
@@ -13,7 +14,7 @@ class PlayerView:
         for element in list_attributes:
             while True:
                 data = input(f"{element} : ")
-                if cls.validate_input(element, data) == True:
+                if cls.validate_input(element, data):
                     dict_inputs[element] = data
                     break
         return dict_inputs
@@ -23,7 +24,6 @@ class PlayerView:
     def validate_input(cls, element, data):
         if data:
             if element == "id_player":
-
                 match = re.search(r"[A-Z]{2}[0-9]{5}", data)
                 if match:
                     return True
@@ -64,7 +64,8 @@ class PlayerView:
     def display_player_list(cls, all_players=None, tournament=None):
         if tournament:
             print(
-                f"\n  --------------- Players registred  in this tournament : {len(tournament.list_players)} ---------------- \n"
+                f"\n  --------------- Players registred  in this tournament : "
+                f"{len(tournament.list_players)} ---------------- \n"
             )
             list_players = tournament.list_players
         elif all_players:
@@ -83,6 +84,15 @@ class PlayerView:
 
     @classmethod
     def display_player(cls, player: Player):
-        print(
-            f"\n Player Id: {player.id_player} \n   First name: {player.first_name} | Last name: {player.last_name} | Date of birth: {player.date_birth}\n\n"
-        )
+        print("\n")
+        print_table(title=player.id_player,
+                    columns=["first_name", "last_name", "date_birth"],
+                    rows=[[player.first_name, player.last_name, player.date_birth]])
+
+    @classmethod
+    def display_title_2(cls, message):
+        title_2(message)
+    
+    @classmethod
+    def display_title_3(cls, message):
+        title_3(message)

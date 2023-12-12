@@ -5,7 +5,6 @@ import uuid
 # import json
 from .player import Player
 from .round import Round
-from .match import Match
 
 
 class Tournament:
