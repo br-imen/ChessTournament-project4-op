@@ -1,3 +1,6 @@
+from views.helpers import print_table
+
+
 class MatchView:
     @classmethod
     def get_match(cls):
@@ -32,14 +35,20 @@ class MatchView:
     @classmethod
     def display_match(cls, match=None, total_score=None, updated=False):
         if match:
+            title = match.name
+            columns = ["player1_id", "score_player1", "player2_id", "score_player2"]
+            rows = [[match.player1_id,
+                    str(match.score_player1),
+                    match.player2_id,
+                    str(match.score_player2),
+                    ]]
             if updated:
+                title = f"{match.name} scores updated"
                 print(f"\n  °°° scores updated °°° \n")
-            else:
-                print(f"\n  ---- {match.name} ----\n")
-            print(
-                f"  Player {match.player1_id} scores: {match.score_player1}\n"
-                f"  Player {match.player2_id} scores: {match.score_player2}\n"
-            )
+            
+            print_table(title=title,
+                columns=columns,
+                rows=rows)     
         if total_score:
             print("\n************* End of tournament ***************** \n")
             for id, value in total_score.items():

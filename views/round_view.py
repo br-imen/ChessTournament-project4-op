@@ -1,5 +1,5 @@
 from models.round import Round
-from views.helpers import title_4
+from views.helpers import print_table, title_4
 from views.match_view import MatchView
 
 
@@ -25,12 +25,17 @@ class RoundView:
 
     @classmethod
     def display_round(cls, round: Round):
-        print(
-            f"\n\n  ************* {round.name} *************\n"
-            f"  start date : {round.start_datetime}\n"
-        )
-        if round.end_datetime:
-            print(f"  End date : {round.end_datetime}\n")
+        print("\n\n\n------------------------------------------------------------------------")
+        title = round.name
+        round_serialzed = round.serialize()
+        columns = ["name", "start_datetime", "end_datetime"]
+        rows = [[round_serialzed["name"],
+                round_serialzed["start_datetime"],
+                round_serialzed["end_datetime"]]]
+        print_table(title=title,
+            columns=columns,
+            rows=rows)
+        
         for match in round.list_matchs:
             MatchView.display_match(match)
 
@@ -45,15 +50,10 @@ class RoundView:
     @classmethod
     def display_all_rounds(cls, tournament=None):
         if tournament:
-            print(
-                f"\n  --------------- List of Rounds for '{tournament.name}' tournament --------------\n"
-            )
             list_rounds = tournament.list_rounds
             for round in list_rounds:
-                cls.display_round(round=round)
-            print(
-                "\n  -----------------------------------------------------------------------------\n"
-            )
+                cls.display_round(round)
+
     
     @classmethod
     def display_title_4(cls, message):

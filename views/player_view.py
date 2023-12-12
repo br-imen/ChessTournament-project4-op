@@ -63,24 +63,22 @@ class PlayerView:
     @classmethod
     def display_player_list(cls, all_players=None, tournament=None):
         if tournament:
-            print(
-                f"\n  --------------- Players registred  in this tournament : "
-                f"{len(tournament.list_players)} ---------------- \n"
-            )
+            title = "Players registred  in this tournament"
             list_players = tournament.list_players
         elif all_players:
-            print(
-                "\n----------------------- List all players -----------------------\n"
-            )
+            title = "List all players"
             list_players = all_players.values()
         else:
             cls.error("No players found")
         sorted_list_players: list[Player] = sorted(
             list_players, key=lambda x: x.first_name.lower()
         )
+        rows = []
         for player in sorted_list_players:
-            cls.display_player(player=player)
-        print("\n  -------------------------------------------------------\n")
+            rows.append([player.id_player, player.first_name, player.last_name, player.date_birth])
+        print_table(title=title,
+                    columns=["id", "first_name", "last_name", "date_birth"],
+                    rows=rows)
 
     @classmethod
     def display_player(cls, player: Player):

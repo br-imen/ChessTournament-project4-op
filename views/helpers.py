@@ -58,4 +58,5 @@ def print_table(title:str, columns:list, rows:list[list]):
         table.add_row(*row, style='bright_green')
     
     console = Console()
+    print("\n")
     console.print(table)

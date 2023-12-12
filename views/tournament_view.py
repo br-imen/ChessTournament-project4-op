@@ -1,5 +1,5 @@
 from models.tournament import Tournament
-from views.helpers import title_2, title_3
+from views.helpers import print_table, title_2, title_3
 
 
 class TournamentView:
@@ -21,33 +21,34 @@ class TournamentView:
         cls, tournament: Tournament = None, all_tournaments: dict = None
     ):
         if tournament:
-            print(
-                f"\n----------------------- The tournament id : {tournament.id} ----------------------- \n"
-                f"  Name = {tournament.name}"
-            )
-            if tournament.end_datetime:
-                print(
-                    f"  Date = {tournament.start_datetime} - {tournament.end_datetime}"
-                )
-            else:
-                print(f"  Date = {tournament.start_datetime}")
-            print(
-                f"  Place = {tournament.place} \n"
-                f"  Number of rounds = {tournament.number_rounds} \n"
-                f"  Description = {tournament.description} \n"
-            )
+            title = f" tournament : {tournament.id}"
+            columns = ["id", "Name", "Place", "start_datetime", 
+                       "end_datetime", "Number of rounds", "description"]
+            tournament = tournament.serialize()
+            rows = [[tournament["id"],
+                     tournament["name"], 
+                     tournament["place"], 
+                     tournament["start_datetime"],
+                     tournament["end_datetime"],
+                     str(tournament["number_rounds"]),
+                     tournament["description"]]]
+            print_table(title=title,
+                columns=columns,
+                rows=rows)
         elif all_tournaments:
-            print(
-                "\n----------------------- List tournaments -----------------------\n"
-            )
+            title = "List tournaments"
+            columns = ["id", "Name", "Place", "start_datetime", "end_datetime"]
+            rows = []
+
             for id, tournament_object in all_tournaments.items():
-                print(
-                    f"{id} \n   Name: {tournament_object.name} |"
-                    f" Place: {tournament_object.place} |"
-                    f" Date: {tournament_object.start_datetime} -"
-                    f" {tournament_object.end_datetime} \n\n"
-                )
-            print("\n-------------------------------------------------------\n")
+                tournament = tournament_object.serialize()
+                rows.append([id, tournament["name"], 
+                             tournament["place"], 
+                             tournament["start_datetime"],
+                             tournament["end_datetime"]])
+            print_table(title=title,
+                columns=columns,
+                rows=rows)
         else:
             cls.error("No tournament found")
 
