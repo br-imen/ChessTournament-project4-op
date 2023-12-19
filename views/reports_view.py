@@ -29,7 +29,7 @@ class ReportsView:
     def report_tournament_menu(cls):
         response = input("\n Type the (Id) of the tournament \n" "Your response: ")
         return response
-    
+
     @classmethod
     def display_title(cls):
         title_2("Show Reports")

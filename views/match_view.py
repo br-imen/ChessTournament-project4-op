@@ -9,8 +9,6 @@ class MatchView:
 
     @classmethod
     def get_score_player(cls, match):
-        print(f"\n\n**** Update {match.name} scores ****\n")
-
         # match view diplay match
         MatchView.display_match(match=match)
 
@@ -37,19 +35,19 @@ class MatchView:
         if match:
             title = match.name
             columns = ["player1_id", "score_player1", "player2_id", "score_player2"]
-            rows = [[match.player1_id,
+            rows = [
+                [
+                    match.player1_id,
                     str(match.score_player1),
                     match.player2_id,
                     str(match.score_player2),
-                    ]]
+                ]
+            ]
             if updated:
                 title = f"{match.name} scores updated"
-                print(f"\n  °°° scores updated °°° \n")
-            
-            print_table(title=title,
-                columns=columns,
-                rows=rows)     
+
+            print_table(title=title, columns=columns, rows=rows)
         if total_score:
-            print("\n************* End of tournament ***************** \n")
+            print("\n\n\n\n************* End of tournament ***************** \n")
             for id, value in total_score.items():
                 print(f"Player {id} scores: {value}\n")

@@ -1,6 +1,5 @@
 from models.round import Round
 from views.helpers import print_table, title_4
-from views.match_view import MatchView
 
 
 class RoundView:
@@ -25,27 +24,51 @@ class RoundView:
 
     @classmethod
     def display_round(cls, round: Round):
-        print("\n\n\n------------------------------------------------------------------------")
+        print("\n")
         title = round.name
-        round_serialzed = round.serialize()
+        round_serialized = round.serialize()
         columns = ["name", "start_datetime", "end_datetime"]
-        rows = [[round_serialzed["name"],
-                round_serialzed["start_datetime"],
-                round_serialzed["end_datetime"]]]
-        print_table(title=title,
-            columns=columns,
-            rows=rows)
-        
+        rows = [
+            [
+                round_serialized["name"],
+                round_serialized["start_datetime"],
+                round_serialized["end_datetime"],
+            ]
+        ]
+        print_table(title=title, columns=columns, rows=rows)
+
+        title = "matchs list"
+        columns = ["name", "player1_id", "score_player1", "player2_id", "score_player2"]
+        rows = []
         for match in round.list_matchs:
-            MatchView.display_match(match)
+            rows.append(
+                [
+                    match.name,
+                    match.player1_id,
+                    str(match.score_player1),
+                    match.player2_id,
+                    str(match.score_player2),
+                ]
+            )
+        print_table(title=title, columns=columns, rows=rows)
 
     @classmethod
     def error(cls, message):
         print(f"\nError: {message} \n")
 
     @classmethod
+    def error_no_players_registred(cls):
+        return cls.error(
+            "You can't start round there is no players registred in the tournament"
+        )
+
+    @classmethod
     def info(cls, message):
         print(f"\nInfo: {message} \n")
+
+    @classmethod
+    def info_add_player(cls):
+        return cls.info("Add another player.")
 
     @classmethod
     def display_all_rounds(cls, tournament=None):
@@ -54,7 +77,10 @@ class RoundView:
             for round in list_rounds:
                 cls.display_round(round)
 
-    
     @classmethod
     def display_title_4(cls, message):
         title_4(message=message)
+
+    @classmethod
+    def display_update_match(cls, match):
+        return cls.display_title_4(f"  Update {match.name}")

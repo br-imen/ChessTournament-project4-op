@@ -30,7 +30,9 @@ class Round:
         return {
             "name": self.name,
             "start_datetime": self.start_datetime.isoformat(timespec="minutes"),
-            "end_datetime": self.end_datetime.isoformat(timespec="minutes"),
+            "end_datetime": self.end_datetime.isoformat(timespec="minutes")
+            if self.end_datetime
+            else "",
             "matchs": [m.serialize() for m in self.list_matchs],
         }
 

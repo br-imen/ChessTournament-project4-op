@@ -30,6 +30,7 @@ class MainController:
     # Start program
     def start(self):
         self.create_data_folder()
+        MainMenu.welcome()
 
         while True:
             # MainMenu to choose
@@ -38,12 +39,12 @@ class MainController:
 
             # To register player
             if choice == "1":
-                PlayerView.display_title_2("Register Player")
+                PlayerView.display_register_player()
                 self.player_controller.register_player()
 
             # To create tournament
             if choice == "2":
-                TournamentView.display_title_2("Create Tournament")
+                TournamentView.display_create_tournament()
                 tournament = self.tournament_controller.create_tournament()
                 if tournament:
                     self.tournament = tournament
@@ -57,18 +58,13 @@ class MainController:
 
                     # See reports of a tournament
                     if report_choice == "2":
-                        TournamentView.display_title_2("Tournament Reports")
+                        TournamentView.display_tournament_reports()
                         self.tournament_controller.tournament_report()
 
                     # Show all players
                     elif report_choice == "1":
-                        PlayerView.display_title_3("All Players")
-                        dict_all_players_objects = (
-                            self.player_controller.get_all_players_data()
-                        )
-                        PlayerView.display_player_list(
-                            all_players=dict_all_players_objects
-                        )
+                        PlayerView.display_all_players()
+                        self.player_controller.show_all_players()
 
                     # Go back
                     elif report_choice == "0":
@@ -76,6 +72,8 @@ class MainController:
 
             # To continue a tournament:
             if choice == "4":
+                """Get last tournament, if exist self.tournament gets the last tournament and
+                resume the tournament"""
                 last_tournament = self.tournament_controller.resume_last_tournament()
                 if last_tournament:
                     self.tournament = last_tournament

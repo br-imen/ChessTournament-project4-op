@@ -48,7 +48,7 @@ class PlayerView:
 
     @classmethod
     def get_id(cls):
-        id = input("Type the id player = ")
+        id = input("\nType the id player = ")
         return id
 
     # Print error
@@ -57,8 +57,20 @@ class PlayerView:
         print(f"\nError: {message} \n")
 
     @classmethod
+    def error_player_exist(cls):
+        return cls.error("Player exist ! Please enter inputs again")
+
+    @classmethod
+    def error_no_players(cls):
+        return cls.error("No players")
+
+    @classmethod
     def info(cls, message):
         print(f"\nInfo: {message} \n")
+
+    @classmethod
+    def info_player_registred(cls):
+        return cls.info("Player registred\n")
 
     @classmethod
     def display_player_list(cls, all_players=None, tournament=None):
@@ -75,22 +87,41 @@ class PlayerView:
         )
         rows = []
         for player in sorted_list_players:
-            rows.append([player.id_player, player.first_name, player.last_name, player.date_birth])
-        print_table(title=title,
-                    columns=["id", "first_name", "last_name", "date_birth"],
-                    rows=rows)
+            rows.append(
+                [
+                    player.id_player,
+                    player.first_name,
+                    player.last_name,
+                    player.date_birth,
+                ]
+            )
+        print_table(
+            title=title,
+            columns=["id", "first_name", "last_name", "date_birth"],
+            rows=rows,
+        )
 
     @classmethod
     def display_player(cls, player: Player):
         print("\n")
-        print_table(title=player.id_player,
-                    columns=["first_name", "last_name", "date_birth"],
-                    rows=[[player.first_name, player.last_name, player.date_birth]])
+        print_table(
+            title=player.id_player,
+            columns=["first_name", "last_name", "date_birth"],
+            rows=[[player.first_name, player.last_name, player.date_birth]],
+        )
 
     @classmethod
     def display_title_2(cls, message):
         title_2(message)
-    
+
+    @classmethod
+    def display_register_player(cls):
+        return cls.display_title_2("Register Player")
+
     @classmethod
     def display_title_3(cls, message):
         title_3(message)
+
+    @classmethod
+    def display_all_players(cls):
+        return cls.display_title_3("All Players")

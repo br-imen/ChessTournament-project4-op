@@ -11,11 +11,13 @@ class RoundController:
 
     # Start round
     def start_round(self, tournament: Tournament):
+        """number_rounds: number of rounds have been done"""
         if tournament.list_rounds is None:
             number_rounds = 0
         else:
             number_rounds = len(tournament.list_rounds)
 
+        """check if we can create another round"""
         if number_rounds < tournament.number_rounds:
             # To create a round
             round = self.create_round(tournament=tournament)
@@ -27,7 +29,7 @@ class RoundController:
             return round
 
     # To create round
-    def create_round(self, tournament):
+    def create_round(self, tournament: Tournament):
         list_matchs = []
         list_players = tournament.list_players
         r = len(tournament.list_rounds)
@@ -93,17 +95,15 @@ class RoundController:
     def run_round(self, tournament):
         if not tournament.list_players:
             # Round view error missing players error
-            RoundView.error(
-                "You can't start round there is no players registred in the tournament"
-            )
+            RoundView.error_no_players_registred()
             pass
         elif len(tournament.list_players) % 2 != 0:
             # roundview info
-            RoundView.info("Add another player.")
+            RoundView.info_add_player()
         else:
             round = self.start_round(tournament=tournament)
-            RoundView.display_title_4("Update Match")
             for match in round.list_matchs:
+                RoundView.display_update_match(match)
                 # Get points of two players
                 points_players: tuple(str) = MatchView.get_score_player(match)
 
