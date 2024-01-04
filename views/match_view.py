@@ -1,53 +1,74 @@
+from controllers.player_contoller import PlayerController
 from views.helpers import print_table
 
 
 class MatchView:
-    @classmethod
-    def get_match(cls):
-        match = input("\nType the name of match to update: \n")
-        return match
+    def __init__(self, match=None) -> None:
+        self.match = match
 
-    @classmethod
-    def get_score_player(cls, match):
+    def get_score_player(self):
         # match view diplay match
-        MatchView.display_match(match=match)
+        self.display_match()
 
-        response = input(
-            f"\n\n-------- Update score for player ** {match.player1_id} ** ---------\n\n"
-            f"   Type (1) if won  \n"
-            f"   Type (2) if lost \n"
-            f"   Type (3) if a tie \n\n"
-            f"   Your response: "
-        )
-        if response == "1":
-            point_player1 = 1
-            point_player2 = 0
-        if response == "2":
-            point_player1 = 0
-            point_player2 = 1
-        if response == "3":
-            point_player1 = 0.5
-            point_player2 = 0.5
+        while True:
+            response = input(
+                f"\n\n-------- Update score for player ** {self.match.player1_id} ** ---------\n\n"
+                f"   Type (1) if won  \n"
+                f"   Type (2) if lost \n"
+                f"   Type (3) if a tie \n\n"
+                f"   Your response: "
+            )
+            if response == "1":
+                point_player1 = 1
+                point_player2 = 0
+                break
+            if response == "2":
+                point_player1 = 0
+                point_player2 = 1
+                break
+            if response == "3":
+                point_player1 = 0.5
+                point_player2 = 0.5
+                break
         return point_player1, point_player2
 
-    @classmethod
-    def display_match(cls, match=None, total_score=None, updated=False):
-        if match:
-            title = match.name
-            columns = ["player1_id", "score_player1", "player2_id", "score_player2"]
+    def display_match(self, total_score=None, updated=False):
+        player_controller = PlayerController()
+        if self.match:
+            title = self.match.name
+            columns = [
+                "player1_id",
+                "player1_name",
+                "score_player1",
+                "player2_id",
+                "player2_name",
+                "score_player2",
+            ]
             rows = [
                 [
-                    match.player1_id,
-                    str(match.score_player1),
-                    match.player2_id,
-                    str(match.score_player2),
+                    self.match.player1_id,
+                    str(player_controller.search_player(self.match.player1_id)),
+                    str(self.match.score_player1),
+                    self.match.player2_id,
+                    str(player_controller.search_player(self.match.player2_id)),
+                    str(self.match.score_player2),
                 ]
             ]
             if updated:
-                title = f"{match.name} scores updated"
+                title = f"{self.match.name} scores updated"
 
             print_table(title=title, columns=columns, rows=rows)
         if total_score:
             print("\n\n\n\n************* End of tournament ***************** \n")
-            for id, value in total_score.items():
-                print(f"Player {id} scores: {value}\n")
+            title = "End of tournament scores"
+            columns = ["Player", "Player Name", "Score"]
+            rows = []
+            for player_score in total_score:
+                rows.append(
+                    [
+                        player_score[0],
+                        str(player_controller.search_player(player_score[0])),
+                        str(player_score[1]),
+                    ]
+                )
+            print_table(title=title, columns=columns, rows=rows)

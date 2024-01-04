@@ -10,12 +10,8 @@ class Player:
         self.date_birth = date_birth
         self.id_player = id_player
 
-    # @classmethod
-    # def get_attributes(cls):
-    #    return list(cls.__init__.__code__.co_varnames)[1:]
-
     def __str__(self) -> str:
-        return f"{self.serialize()}"
+        return f"{self.first_name} {self.last_name}"
 
     def serialize(self):
         return {

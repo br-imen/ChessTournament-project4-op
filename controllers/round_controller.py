@@ -7,7 +7,8 @@ from views.round_view import RoundView
 
 class RoundController:
     def __init__(self) -> None:
-        pass
+        self.match_view = MatchView()
+        self.round_view = RoundView()
 
     # Start round
     def start_round(self, tournament: Tournament):
@@ -25,7 +26,7 @@ class RoundController:
             # Add it to list_round in tournament object
             tournament.add_round(round)
 
-            RoundView.display_round(round)
+            self.round_view.display_round(round)
             return round
 
     # To create round
@@ -82,7 +83,13 @@ class RoundController:
             round.end()
             tournament.end_tournament()
             # self.save()
-            MatchView.display_match(total_score=tournament.total_score)
+            sorted_list_total_scores: list[tuple()] = sorted(
+                tournament.total_score.items(),
+                key=lambda x: x[1],
+                reverse=True,
+            )
+            self.match_view = MatchView()
+            self.match_view.display_match(total_score=sorted_list_total_scores)
             return
 
         # There is more rounds to finish, we end only the round
@@ -95,22 +102,22 @@ class RoundController:
     def run_round(self, tournament):
         if not tournament.list_players:
             # Round view error missing players error
-            RoundView.error_no_players_registred()
-            pass
+            self.round_view.error_no_players_registred()
         elif len(tournament.list_players) % 2 != 0:
             # roundview info
-            RoundView.info_add_player()
+            self.round_view.info_add_player()
         else:
             round = self.start_round(tournament=tournament)
             for match in round.list_matchs:
-                RoundView.display_update_match(match)
+                self.round_view.display_update_match(match)
                 # Get points of two players
-                points_players: tuple(str) = MatchView.get_score_player(match)
+                self.match_view = MatchView(match=match)
+                points_players: tuple(str) = self.match_view.get_score_player()
 
                 # Update the score in match:
                 match.score_player1 = points_players[0]
                 match.score_player2 = points_players[1]
-                MatchView.display_match(match=match, updated=True)
+                self.match_view.display_match(updated=True)
 
             self.end_round(round=round, tournament=tournament)
 

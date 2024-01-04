@@ -2,9 +2,6 @@
 from datetime import datetime
 from .match import Match
 
-# import uuid
-# import json
-
 
 class Round:
     def __init__(
@@ -14,9 +11,7 @@ class Round:
         start_datetime=None,
         end_datetime: datetime = None,
     ) -> None:
-        # self.id = str(uuid.uuid4())
         self.name: str = name
-        # self.tournament_id = tournament_id
         self.start_datetime = (
             datetime.now() if start_datetime is None else start_datetime
         )
@@ -66,14 +61,3 @@ class Round:
 
     def end(self):
         self.end_datetime = datetime.now()
-
-
-#    def save(self,round_dict: dict):
-#        try:
-#            with open(f"{ABSOLUTE_PATH}/data/rounds/rounds.json", "r") as round_file:
-#                list_rounds = json.load(round_file)
-#        except FileNotFoundError:
-#            list_rounds = []
-#        list_rounds.append(round_dict)
-#        with open(f"{ABSOLUTE_PATH}/data/rounds/rounds.json", "w") as round_file:
-#            json.dump(list_rounds, round_file)

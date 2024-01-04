@@ -15,30 +15,34 @@ class TournamentController:
         self.tournament = tournament
         self.round_controller = RoundController()
         self.player_controller = PlayerController()
+        self.report_view = ReportsView()
+        self.round_view = RoundView()
+        self.tournament_view = TournamentView()
+        self.player_view = PlayerView()
 
         # To create tournament
 
     def create_tournament(self):
         list_tournaments_not_completed = self.filter_tournaments(end_datetime=None)
         if list_tournaments_not_completed == []:
-            tournament_dict = TournamentView.get_inputs()
+            tournament_dict = self.tournament_view.get_inputs()
             tournament = Tournament(**tournament_dict)
             self.tournament = tournament
             self.save()
-            TournamentView.display_tournament_data(tournament=tournament)
+            self.tournament_view.display_tournament_data(tournament=tournament)
             return tournament
         else:
-            TournamentView.error_finish_tournament()
+            self.tournament_view.error_finish_tournament()
             return
 
     # Add player to tournament
     def add_player_tournament(self):
         len_list_players = 1
         while len_list_players % 2 != 0:
-            id = PlayerView.get_id()
+            id = self.player_view.get_id()
             player_object = self.player_controller.search_player(id)
             if not player_object:
-                TournamentView.error_player_not_found()
+                self.tournament_view.error_player_not_found()
                 continue
 
             # Get list of ids already registred in tournament.list_players
@@ -48,7 +52,7 @@ class TournamentController:
 
             # If there is, the player cannot be added
             if id in list_ids:
-                TournamentView.error_player_exist()
+                self.tournament_view.error_player_exist()
                 continue
 
             # Add player to player_list in Tournament object "tournament":
@@ -58,12 +62,12 @@ class TournamentController:
             self.save()
 
             # Display numbers of players added
-            PlayerView.display_player_list(tournament=self.tournament)
+            self.player_view.display_player_list(tournament=self.tournament)
 
             # If number impair should add another player
             len_list_players = len(self.tournament.list_players)
             if len_list_players % 2 != 0:
-                TournamentView.info_add_player()
+                self.tournament_view.info_add_player()
 
     # Save tournament:
     def save(self):
@@ -93,7 +97,7 @@ class TournamentController:
                     dict_tournaments
                 )
         except FileNotFoundError:
-            TournamentView.error_no_tournament()
+            self.tournament_view.error_no_tournament()
         return dict_tournaments_objects
 
     # Search for id tournament:
@@ -123,7 +127,7 @@ class TournamentController:
     def resume_last_tournament(self):
         last_tournament = self.get_last_tournament()
         if last_tournament is None:
-            TournamentView.error_no_tournament_resume()
+            self.tournament_view.error_no_tournament_resume()
             return
         self.tournament = last_tournament
         return last_tournament
@@ -132,48 +136,49 @@ class TournamentController:
     def tournament_report(self):
         # Show all tournaments
         dict_tournaments_objects = self.get_all_tournaments_data()
-        TournamentView.display_tournament_data(all_tournaments=dict_tournaments_objects)
-        id_tournament = ReportsView.report_tournament_menu()
+        self.tournament_view.display_tournament_data(
+            all_tournaments=dict_tournaments_objects
+        )
+        id_tournament = self.report_view.report_tournament_menu()
         tournament_object = self.search_tournament(id_tournament)
         if tournament_object:
-            TournamentView.display_tournament_data(tournament=tournament_object)
+            self.tournament_view.display_tournament_data(tournament=tournament_object)
             self.tournament = tournament_object
             while True:
-                choice_report = ReportsView.get_reports()
+                choice_report = self.report_view.get_reports()
 
                 # Show list players in tournament
                 if choice_report == "1":
-                    TournamentView.display_tournament_players()
-                    PlayerView.display_player_list(tournament=self.tournament)
+                    self.tournament_view.display_tournament_players()
+                    self.player_view.display_player_list(tournament=self.tournament)
 
                 # Show list of rounds and its matchs of one tournament
                 if choice_report == "2":
-                    TournamentView.display_tournament_rounds()
-                    RoundView.display_all_rounds(tournament=self.tournament)
+                    self.tournament_view.display_tournament_rounds()
+                    self.round_view.display_all_rounds(tournament=self.tournament)
 
                 if choice_report == "0":
                     break
         else:
-            TournamentView.error_no_tournament()
+            self.tournament_view.error_no_tournament()
             pass
 
     def control_tournament(self):
-        TournamentView.display_tournament_menu()
+        self.tournament_view.display_tournament_menu()
         while not (len(self.tournament.list_rounds) == self.tournament.number_rounds):
-            choice = RoundView.menu_start_round(len(self.tournament.list_rounds))
-
+            choice = self.round_view.menu_start_round(len(self.tournament.list_rounds))
             # To add player
-            if choice == "1":
-                TournamentView.display_add_player()
+            if choice == "1" and len(self.tournament.list_rounds) == 0:
+                self.tournament_view.display_add_player()
                 self.player_controller.show_all_players()
                 self.add_player_tournament()
 
             # To start a round:
-            if choice == "2":
-                TournamentView.display_start_round()
+            elif choice == "2":
+                self.tournament_view.display_start_round()
                 self.round_controller.run_round(tournament=self.tournament)
                 self.save()
 
-            if choice == "0":
+            elif choice == "0":
                 self.save()
                 break

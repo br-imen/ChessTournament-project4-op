@@ -4,21 +4,36 @@ from views.helpers import print_table, title_2, title_3
 
 class TournamentView:
     # Get input to create tournament
-    @classmethod
-    def get_inputs(cls):
+
+    def get_inputs(self):
         dict_inputs = {}
         list_inputs = ["name", "place", "number_rounds", "description"]
         for element in list_inputs:
-            data = input(f"\n{element} : ")
+            while True:
+                data = input(f"\n{element} : ")
+                if self.validate_input(element, data):
+                    break
             if element == "number_rounds":
                 data = int(data)
             dict_inputs[element] = data
         return dict_inputs
 
+    def validate_input(self, element, data):
+        if data:
+            if element == "number_rounds":
+                if data.isdigit():
+                    return True
+                else:
+                    self.error("Invalid number rounds")
+                    return False
+        else:
+            self.error("Missing input")
+            return False
+        return True
+
     # Print tournament that's created
-    @classmethod
     def display_tournament_data(
-        cls, tournament: Tournament = None, all_tournaments: dict = None
+        self, tournament: Tournament = None, all_tournaments: dict = None
     ):
         if tournament:
             title = f" tournament : {tournament.id}"
@@ -62,76 +77,60 @@ class TournamentView:
                 )
             print_table(title=title, columns=columns, rows=rows)
         else:
-            cls.error("No tournament found")
+            self.error("No tournament found")
 
     # Print error
-    @classmethod
-    def error(cls, message):
+    def error(self, message):
         print(f"\nError: {message} \n")
 
-    @classmethod
-    def error_finish_tournament(cls):
-        return cls.error(
+    def error_finish_tournament(self):
+        return self.error(
             "There still a tournament not completed, you can't create a new one."
         )
 
-    @classmethod
-    def error_player_not_found(cls):
-        return cls.error("Player's id not found")
+    def error_player_not_found(self):
+        return self.error("Player's id not found")
 
-    @classmethod
-    def error_no_tournament(cls):
-        return cls.error("No tournament found")
+    def error_no_tournament(self):
+        return self.error("No tournament found")
 
-    @classmethod
-    def error_no_tournament_resume(cls):
-        return cls.error("No tournament to resume")
+    def error_no_tournament_resume(self):
+        return self.error("No tournament to resume")
 
-    @classmethod
-    def error_player_exist(cls):
-        return cls.error("Player already registred in tournament")
+    def error_player_exist(self):
+        return self.error("Player already registred in tournament")
 
     # Print info
-    @classmethod
-    def info(cls, message):
+
+    def info(self, message):
         print(f"\nInfo: {message} \n")
 
-    @classmethod
-    def info_add_player(cls):
-        return cls.info("You must add another player")
+    def info_add_player(self):
+        return self.info("You must add another player")
 
-    @classmethod
-    def display_title_2(cls, message):
+    def display_title_2(self, message):
         title_2(message=message)
 
-    @classmethod
-    def display_title_3(cls, message):
+    def display_title_3(self, message):
         title_3(message=message)
 
-    @classmethod
-    def display_tournament_players(cls):
-        return cls.display_title_3("Tournament Players")
+    def display_tournament_players(self):
+        return self.display_title_3("Tournament Players")
 
-    @classmethod
-    def display_tournament_rounds(cls):
-        return cls.display_title_3("Tournament Rounds")
+    def display_tournament_rounds(self):
+        return self.display_title_3("Tournament Rounds")
 
-    @classmethod
-    def display_add_player(cls):
-        return cls.display_title_3("Add Player")
+    def display_add_player(self):
+        return self.display_title_3("Add Player")
 
-    @classmethod
-    def display_start_round(cls):
-        return cls.display_title_3("Start Round")
+    def display_start_round(self):
+        return self.display_title_3("Start Round")
 
-    @classmethod
-    def display_tournament_menu(cls):
-        return cls.display_title_2("Tournament Menu")
+    def display_tournament_menu(self):
+        return self.display_title_2("Tournament Menu")
 
-    @classmethod
-    def display_create_tournament(cls):
-        return cls.display_title_2("Create Tournament")
+    def display_create_tournament(self):
+        return self.display_title_2("Create Tournament")
 
-    @classmethod
-    def display_tournament_reports(cls):
-        return cls.display_title_2("Tournament Reports")
+    def display_tournament_reports(self):
+        return self.display_title_2("Tournament Reports")

@@ -111,15 +111,3 @@ class Tournament:
 
     def end_tournament(self):
         self.end_datetime = datetime.now()
-
-
-#    # Save tournament
-#    def save(self, tournament_dict):
-#        try:
-#            with open(f"{ABSOLUTE_PATH}/data/tournaments/tournaments.json", "r") as tournament_file:
-#                list_tournaments = json.load(tournament_file)
-#        except FileNotFoundError:
-#            list_tournaments = []
-#        list_tournaments.append(tournament_dict)
-#        with open(f"{ABSOLUTE_PATH}/data/tournaments/tournaments.json", "w") as tournament_file:
-#            json.dump(list_tournaments, tournament_file)

@@ -1,9 +1,9 @@
+from controllers.player_contoller import PlayerController
 from models.round import Round
 from views.helpers import print_table, title_4
 
 
 class RoundView:
-    @classmethod
     def menu_start_round(self, list_rounds_length):
         if list_rounds_length == 0:
             option_start_round = input(
@@ -22,8 +22,8 @@ class RoundView:
             )
         return option_start_round
 
-    @classmethod
-    def display_round(cls, round: Round):
+    def display_round(self, round: Round):
+        player_controller = PlayerController()
         print("\n")
         title = round.name
         round_serialized = round.serialize()
@@ -38,49 +38,54 @@ class RoundView:
         print_table(title=title, columns=columns, rows=rows)
 
         title = "matchs list"
-        columns = ["name", "player1_id", "score_player1", "player2_id", "score_player2"]
+        columns = [
+            "name",
+            "player1_id",
+            "player1_name",
+            "score_player1",
+            "player2_id",
+            "player2_name",
+            "score_player2",
+        ]
         rows = []
         for match in round.list_matchs:
+            player1 = player_controller.search_player(match.player1_id)
+            player2 = player_controller.search_player(match.player2_id)
             rows.append(
                 [
                     match.name,
                     match.player1_id,
+                    str(player1),
                     str(match.score_player1),
                     match.player2_id,
+                    str(player2),
                     str(match.score_player2),
                 ]
             )
         print_table(title=title, columns=columns, rows=rows)
 
-    @classmethod
-    def error(cls, message):
+    def error(self, message):
         print(f"\nError: {message} \n")
 
-    @classmethod
-    def error_no_players_registred(cls):
-        return cls.error(
+    def error_no_players_registred(self):
+        return self.error(
             "You can't start round there is no players registred in the tournament"
         )
 
-    @classmethod
-    def info(cls, message):
+    def info(self, message):
         print(f"\nInfo: {message} \n")
 
-    @classmethod
-    def info_add_player(cls):
-        return cls.info("Add another player.")
+    def info_add_player(self):
+        return self.info("Add another player.")
 
-    @classmethod
-    def display_all_rounds(cls, tournament=None):
+    def display_all_rounds(self, tournament=None):
         if tournament:
             list_rounds = tournament.list_rounds
             for round in list_rounds:
-                cls.display_round(round)
+                self.display_round(round)
 
-    @classmethod
-    def display_title_4(cls, message):
+    def display_title_4(self, message):
         title_4(message=message)
 
-    @classmethod
-    def display_update_match(cls, match):
-        return cls.display_title_4(f"  Update {match.name}")
+    def display_update_match(self, match):
+        return self.display_title_4(f"  Update {match.name}")

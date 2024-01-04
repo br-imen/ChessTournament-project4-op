@@ -2,8 +2,7 @@ from views.helpers import title_2
 
 
 class ReportsView:
-    @classmethod
-    def get_reports(cls):
+    def get_reports(self):
         print("\n")
         response = input(
             "\n  Choose an option to do\n"
@@ -14,8 +13,7 @@ class ReportsView:
         )
         return response
 
-    @classmethod
-    def report_menu(cls):
+    def report_menu(self):
         print("\n\n")
         response = input(
             "Type (1) ----> List of all players \n"
@@ -25,11 +23,9 @@ class ReportsView:
         )
         return response
 
-    @classmethod
-    def report_tournament_menu(cls):
+    def report_tournament_menu(self):
         response = input("\n Type the (Id) of the tournament \n" "Your response: ")
         return response
 
-    @classmethod
-    def display_title(cls):
+    def display_title(self):
         title_2("Show Reports")

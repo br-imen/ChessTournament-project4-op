@@ -6,74 +6,65 @@ from views.helpers import print_table, title_2, title_3
 
 class PlayerView:
     # Function: gets attributes of class and returns a dict of inputs of user.
-    @classmethod
-    def get_inputs(cls):
+    def get_inputs(self):
         dict_inputs = {}
         list_attributes = ["first_name", "last_name", "date_birth", "id_player"]
         print("\n")
         for element in list_attributes:
             while True:
                 data = input(f"{element} : ")
-                if cls.validate_input(element, data):
+                if self.validate_input(element, data):
                     dict_inputs[element] = data
                     break
         return dict_inputs
 
     # Validate inputs user
-    @classmethod
-    def validate_input(cls, element, data):
+    def validate_input(self, element, data):
         if data:
             if element == "id_player":
                 match = re.search(r"[A-Z]{2}[0-9]{5}", data)
                 if match:
                     return True
                 else:
-                    cls.error("Invalid id")
+                    self.error("Invalid id")
                     return False
             elif element == "date_birth":
                 match = re.search(
-                    r"(0[1-9]|[12][0-9]|3[01])(\/|-)(0[1-9]|1[1,2])(\/|-)(19|20)\d{2}",
+                    r"^[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}$",
                     data,
                 )
                 if match:
                     return True
                 else:
-                    cls.error("Invalid date")
+                    self.error("Invalid date")
                     return False
             else:
                 return True
         else:
-            cls.error("Missing input")
+            self.error("Missing input")
             return False
 
-    @classmethod
-    def get_id(cls):
+    def get_id(self):
         id = input("\nType the id player = ")
         return id
 
     # Print error
-    @classmethod
-    def error(cls, message):
+    def error(self, message):
         print(f"\nError: {message} \n")
 
-    @classmethod
-    def error_player_exist(cls):
-        return cls.error("Player exist ! Please enter inputs again")
+    def error_player_exist(self):
+        return self.error("Player exist ! Please enter inputs again")
 
-    @classmethod
-    def error_no_players(cls):
-        return cls.error("No players")
+    def error_no_players(self):
+        return self.error("No players")
 
-    @classmethod
-    def info(cls, message):
+    def info(self, message):
         print(f"\nInfo: {message} \n")
 
-    @classmethod
-    def info_player_registred(cls):
-        return cls.info("Player registred\n")
+    def info_player_registred(self):
+        return self.info("Player registred\n")
 
-    @classmethod
-    def display_player_list(cls, all_players=None, tournament=None):
+    def display_player_list(self, all_players=None, tournament=None):
         if tournament:
             title = "Players registred  in this tournament"
             list_players = tournament.list_players
@@ -81,7 +72,7 @@ class PlayerView:
             title = "List all players"
             list_players = all_players.values()
         else:
-            cls.error("No players found")
+            self.error("No players found")
         sorted_list_players: list[Player] = sorted(
             list_players, key=lambda x: x.first_name.lower()
         )
@@ -101,8 +92,7 @@ class PlayerView:
             rows=rows,
         )
 
-    @classmethod
-    def display_player(cls, player: Player):
+    def display_player(self, player: Player):
         print("\n")
         print_table(
             title=player.id_player,
@@ -110,18 +100,14 @@ class PlayerView:
             rows=[[player.first_name, player.last_name, player.date_birth]],
         )
 
-    @classmethod
-    def display_title_2(cls, message):
+    def display_title_2(self, message):
         title_2(message)
 
-    @classmethod
-    def display_register_player(cls):
-        return cls.display_title_2("Register Player")
+    def display_register_player(self):
+        return self.display_title_2("Register Player")
 
-    @classmethod
-    def display_title_3(cls, message):
+    def display_title_3(self, message):
         title_3(message)
 
-    @classmethod
-    def display_all_players(cls):
-        return cls.display_title_3("All Players")
+    def display_all_players(self):
+        return self.display_title_3("All Players")

@@ -15,8 +15,8 @@ class MainMenu:
         )
         return option_menu
 
-    @classmethod
-    def welcome(cls):
+    @staticmethod
+    def welcome():
         print(
             r"""
                                                               _:_
