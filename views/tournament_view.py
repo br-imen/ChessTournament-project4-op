@@ -3,7 +3,11 @@ from views.helpers import print_table, title_2, title_3
 
 
 class TournamentView:
-    # Get input to create tournament
+    def __init__(self) -> None:
+        """Tournament View
+        class that serves as a view for tournament model
+        """
+        pass
 
     def get_inputs(self):
         dict_inputs = {}
@@ -19,6 +23,15 @@ class TournamentView:
         return dict_inputs
 
     def validate_input(self, element, data):
+        """validate input
+
+        Args:
+            element (str): the name of the attribute
+            data : the data of the attribute
+
+        Returns:
+            bool: if is valide it return True else is return False
+        """
         if data:
             if element == "number_rounds":
                 if data.isdigit():

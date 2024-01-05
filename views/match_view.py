@@ -4,9 +4,19 @@ from views.helpers import print_table
 
 class MatchView:
     def __init__(self, match=None) -> None:
+        """Match view
+            class that serves as view for the match model
+        Args:
+            match (Match): Defaults to None.
+        """
         self.match = match
 
     def get_score_player(self):
+        """Input players scores
+
+        Returns:
+            tuple: players scores
+        """
         # match view diplay match
         self.display_match()
 
@@ -33,6 +43,13 @@ class MatchView:
         return point_player1, point_player2
 
     def display_match(self, total_score=None, updated=False):
+        """display match as displaying one match score if self.match exist
+            or all matchs scores at the end of the tournament
+
+        Args:
+            total_score (list[tuple]): Defaults to None.
+            updated (bool): if true display updated match . Defaults to False.
+        """
         player_controller = PlayerController()
         if self.match:
             title = self.match.name

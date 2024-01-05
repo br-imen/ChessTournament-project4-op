@@ -5,6 +5,14 @@ import json
 
 class Player:
     def __init__(self, first_name, last_name, date_birth, id_player) -> None:
+        """Inialize Player model
+
+        Args:
+            first_name (_type_): player's first name
+            last_name (_type_): player's last name
+            date_birth (_type_): player's birth date
+            id_player (_type_): player's id
+        """
         self.first_name = first_name
         self.last_name = last_name
         self.date_birth = date_birth

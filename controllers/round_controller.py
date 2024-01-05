@@ -7,18 +7,29 @@ from views.round_view import RoundView
 
 class RoundController:
     def __init__(self) -> None:
+        """Round Controller
+        Controller that orchestrate round processes
+        """
         self.match_view = MatchView()
         self.round_view = RoundView()
 
     # Start round
     def start_round(self, tournament: Tournament):
-        """number_rounds: number of rounds have been done"""
+        """start a round for givin tournament
+
+        Args:
+            tournament (Tournament): givin tournament
+
+        Returns:
+            Round:
+        """
+        # number_rounds: number of rounds have been done
         if tournament.list_rounds is None:
             number_rounds = 0
         else:
             number_rounds = len(tournament.list_rounds)
 
-        """check if we can create another round"""
+        # check if we can create another round
         if number_rounds < tournament.number_rounds:
             # To create a round
             round = self.create_round(tournament=tournament)
@@ -31,6 +42,14 @@ class RoundController:
 
     # To create round
     def create_round(self, tournament: Tournament):
+        """Create a round for a givin tournament
+
+        Args:
+            tournament (Tournament):
+
+        Returns:
+            Round: round created
+        """
         list_matchs = []
         list_players = tournament.list_players
         r = len(tournament.list_rounds)
@@ -74,6 +93,12 @@ class RoundController:
 
     # To end round:
     def end_round(self, round: Round, tournament: Tournament):
+        """End a givin round and if all rounds end, tournament will be ended too
+
+        Args:
+            round (Round):
+            tournament (Tournament):
+        """
         # Get number of rounds have been done
         number_rounds = len(tournament.list_rounds)
 
@@ -99,7 +124,13 @@ class RoundController:
             return
 
     # From start a round to the end round
-    def run_round(self, tournament):
+    def run_round(self, tournament: Tournament):
+        """Run round for a givin tournament
+            by entering scores for every match
+
+        Args:
+            tournament (Tournament):
+        """
         if not tournament.list_players:
             # Round view error missing players error
             self.round_view.error_no_players_registred()

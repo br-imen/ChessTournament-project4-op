@@ -11,6 +11,12 @@ from views.tournament_view import TournamentView
 
 class TournamentController:
     def __init__(self, tournament=None) -> None:
+        """Tournament Controller
+            Controller that orchestrate all the tournament's processes
+
+        Args:
+            tournament (Tournament): Defaults to None.
+        """
         self.tournament_path = f"{DATA_PATH}/tournaments"
         self.tournament = tournament
         self.round_controller = RoundController()
@@ -23,6 +29,11 @@ class TournamentController:
         # To create tournament
 
     def create_tournament(self):
+        """Create and return a tournament
+
+        Returns:
+            Tournament:
+        """
         list_tournaments_not_completed = self.filter_tournaments(end_datetime=None)
         if list_tournaments_not_completed == []:
             tournament_dict = self.tournament_view.get_inputs()
@@ -37,6 +48,7 @@ class TournamentController:
 
     # Add player to tournament
     def add_player_tournament(self):
+        """Add a player to tournament"""
         len_list_players = 1
         while len_list_players % 2 != 0:
             id = self.player_view.get_id()
@@ -71,6 +83,9 @@ class TournamentController:
 
     # Save tournament:
     def save(self):
+        """Save tournament to json file
+        raise and exception for a json decoding error
+        """
         dict_tournaments = {}
         try:
             with open(
@@ -87,6 +102,11 @@ class TournamentController:
 
     # Get dict_tournaments:
     def get_all_tournaments_data(self):
+        """Get all tournaments data from json file
+
+        Returns:
+            dict: dict for all tournaments data
+        """
         dict_tournaments_objects = {}
         try:
             with open(
@@ -102,12 +122,28 @@ class TournamentController:
 
     # Search for id tournament:
     def search_tournament(self, id):
+        """Search tournament by id
+
+        Args:
+            id (str):
+
+        Returns:
+            Tournament: tournament object
+        """
         dict_tournaments_objects = self.get_all_tournaments_data()
         if id in dict_tournaments_objects:
             return dict_tournaments_objects[id]
 
     # Find tournament by date and defined by None not ended:
     def filter_tournaments(self, end_datetime=None):
+        """Filter tournaments by end_datetime
+
+        Args:
+            end_datetime (datetime): Defaults to None.
+
+        Returns:
+            list[Tournament]:
+        """
         dict_tournaments_objects = self.get_all_tournaments_data()
         list_tournaments_objects = []
         for id, tournament_object in dict_tournaments_objects.items():
@@ -117,6 +153,11 @@ class TournamentController:
 
     # Find the last tournament
     def get_last_tournament(self):
+        """Get the last tournament
+
+        Returns:
+            Tournament:
+        """
         all_tournaments_objects = self.get_all_tournaments_data()
         for id, tournament_object in all_tournaments_objects.items():
             if not tournament_object.end_datetime:
@@ -125,6 +166,12 @@ class TournamentController:
 
     # Assign the last tournament to self.tournament
     def resume_last_tournament(self):
+        """Resume the last tournament if exist
+            and initialize self.tournament
+
+        Returns:
+            Tournament:
+        """
         last_tournament = self.get_last_tournament()
         if last_tournament is None:
             self.tournament_view.error_no_tournament_resume()
@@ -134,6 +181,9 @@ class TournamentController:
 
     # Tournament reports
     def tournament_report(self):
+        """Tournament Report
+        display all tournament report
+        """
         # Show all tournaments
         dict_tournaments_objects = self.get_all_tournaments_data()
         self.tournament_view.display_tournament_data(
@@ -164,6 +214,9 @@ class TournamentController:
             pass
 
     def control_tournament(self):
+        """Control tournament
+        control all the tournament's processes
+        """
         self.tournament_view.display_tournament_menu()
         while not (len(self.tournament.list_rounds) == self.tournament.number_rounds):
             choice = self.round_view.menu_start_round(len(self.tournament.list_rounds))

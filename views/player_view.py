@@ -5,6 +5,12 @@ from views.helpers import print_table, title_2, title_3
 
 
 class PlayerView:
+    def __init__(self) -> None:
+        """Player view
+        Class serves as a view for the player model
+        """
+        pass
+
     # Function: gets attributes of class and returns a dict of inputs of user.
     def get_inputs(self):
         dict_inputs = {}
@@ -20,6 +26,15 @@ class PlayerView:
 
     # Validate inputs user
     def validate_input(self, element, data):
+        """Validate input
+
+        Args:
+            element (str): the name of the attribute
+            data : the data of the attribute
+
+        Returns:
+            bool: if is valide it return True else is return False
+        """
         if data:
             if element == "id_player":
                 match = re.search(r"[A-Z]{2}[0-9]{5}", data)

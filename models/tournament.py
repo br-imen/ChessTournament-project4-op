@@ -20,6 +20,19 @@ class Tournament:
         start_datetime=None,
         id: str = None,
     ):
+        """Inialize Tournament model
+
+        Args:
+            name (str): name for tournament
+            place (str): place of the tournament
+            description (str): description for tournament
+            list_players (list[Player], optional): lists of player registered for tournament. Defaults to None.
+            end_datetime (datetime, optional): end datetime for tournament. Defaults to None.
+            list_rounds (list[Round], optional): list of rounds for tournament. Defaults to None.
+            number_rounds (int, optional): number of rounds for tournament. Defaults to 4.
+            start_datetime (_type_, optional): start datetime for tournament. Defaults to None.
+            id (str, optional): id of tournament. Defaults to None.
+        """
         if list_players is None:
             list_players = []
         if list_rounds is None:

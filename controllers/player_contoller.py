@@ -6,12 +6,17 @@ from settings import DATA_PATH
 
 class PlayerController:
     def __init__(self) -> None:
+        """Player Controller
+        this class serve as controller for the player object
+        """
         self.player_path = f"{DATA_PATH}/players"
         self.player_view = PlayerView()
 
     # Create new player
     def create_player(self):
-        """player_verif: to ask again in case the id player input exist in database"""
+        """
+        player_verif: to ask again in case the id player input exist in database
+        """
         player_verif = True
         while player_verif:
             player_dict = self.player_view.get_inputs()
@@ -29,7 +34,12 @@ class PlayerController:
         self.player_view.info_player_registred()
 
     # Return all players data:
-    def get_all_players_data(self, return_type=dict):
+    def get_all_players_data(self):
+        """Return all players from storage file
+
+        Returns:
+            dict: dict for all players
+        """
         dict_players = {}
         try:
             with open(f"{self.player_path}/players.json", "r") as players_file:
@@ -41,6 +51,14 @@ class PlayerController:
 
     # Search for id player:
     def search_player(self, id):
+        """Search player by id
+
+        Args:
+            id (str): id of player
+
+        Returns:
+            dict:
+        """
         dict_players_object = self.get_all_players_data()
         if id in dict_players_object:
             return dict_players_object[id]

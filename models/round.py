@@ -11,6 +11,14 @@ class Round:
         start_datetime=None,
         end_datetime: datetime = None,
     ) -> None:
+        """Inialize Round model
+
+        Args:
+            name (str): name of round
+            list_matchs (list[Match]): list of matchs
+            start_datetime (_type_, optional): start datetime for the round. Defaults to None.
+            end_datetime (datetime, optional): end datetime for the round. Defaults to None.
+        """
         self.name: str = name
         self.start_datetime = (
             datetime.now() if start_datetime is None else start_datetime

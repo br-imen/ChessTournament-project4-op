@@ -4,6 +4,12 @@ from views.helpers import print_table, title_4
 
 
 class RoundView:
+    def __init__(self) -> None:
+        """Round view
+        Class that serves as a view for the round
+        """
+        pass
+
     def menu_start_round(self, list_rounds_length):
         if list_rounds_length == 0:
             option_start_round = input(
@@ -23,6 +29,11 @@ class RoundView:
         return option_start_round
 
     def display_round(self, round: Round):
+        """Display a givin round
+
+        Args:
+            round (Round):
+        """
         player_controller = PlayerController()
         print("\n")
         title = round.name

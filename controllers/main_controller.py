@@ -11,6 +11,10 @@ from settings import DATA_PATH
 
 class MainController:
     def __init__(self):
+        """Main controller
+        This module serves as the main controller for the application.
+        it orchestrate all the components.
+        """
         self.tournament = None
         self.tournament_path = f"{DATA_PATH}/tournaments"
         self.player_controller = PlayerController()
@@ -21,6 +25,7 @@ class MainController:
 
     # To create a data folder
     def create_data_folder(self):
+        """Create if not exist data folder for storage"""
         if not os.path.exists(DATA_PATH):
             os.makedirs(DATA_PATH)
         if not os.path.exists(self.player_controller.player_path):

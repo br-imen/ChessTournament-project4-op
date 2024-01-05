@@ -2,6 +2,10 @@ from views.helpers import title_2
 
 
 class ReportsView:
+    def __init__(self) -> None:
+        """Report view"""
+        pass
+
     def get_reports(self):
         print("\n")
         response = input(
