@@ -11,7 +11,7 @@ class ReportsView:
         response = input(
             "\n  Choose an option to do\n"
             "   Type (1) -----> List of players of this tournament \n"
-            "   Type (2) -----> List of rounds and matchs of this tournament \n"
+            "   Type (2) -----> List of rounds and matchs for this tournament \n"
             "   Type (0) -----> Go back \n"
             "   Your response: "
         )

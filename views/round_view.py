@@ -14,7 +14,7 @@ class RoundView:
         if list_rounds_length == 0:
             option_start_round = input(
                 "\nChoose an option to do : \n"
-                "Type (1) -----> Add a player in tournament \n"
+                "Type (1) -----> Add a player to tournament \n"
                 "Type (2) -----> Start a round\n"
                 "Type (0) -----> Quit \n"
                 "Your response: "
